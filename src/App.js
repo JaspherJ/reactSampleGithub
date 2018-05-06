@@ -14,18 +14,6 @@ return (
         );
 };
 
-let data = [
-  {
-    name : "Jaspher",
-    avatar :"https://avatars0.githubusercontent.com/u/4433303?v=4",
-    company:"Fl"
-  },
-  {
-    name : "John",
-    avatar :"https://avatars1.githubusercontent.com/u/1668?v=4",
-    company:"Syncfusion"
-  }
-]
 const CardList = (props) => {
     return (
       <div>
@@ -46,6 +34,21 @@ class Form extends React.Component {
   }
 }
 class App extends Component {
+state = {
+  data : [
+    {
+      name : "Jaspher",
+      avatar :"https://avatars0.githubusercontent.com/u/4433303?v=4",
+      company:"Fl"
+    },
+    {
+      name : "John",
+      avatar :"https://avatars1.githubusercontent.com/u/1668?v=4",
+      company:"Syncfusion"
+    }
+  ]
+}
+
   render() {
     return (
       <div className="App">
@@ -57,7 +60,7 @@ class App extends Component {
           To get started, edit <code>src/App.js</code> and save to reload.
         </p>
         <div> <Form /></div>
-        <div><CardList cards = {data}/> </div>
+        <div><CardList cards = {this.state.data}/> </div>
       </div>
     );
   }
