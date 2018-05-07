@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-
+import axios from "axios"
 const Card = (props) => {
 return (
           <div>
@@ -17,17 +17,33 @@ return (
 const CardList = (props) => {
     return (
       <div>
-        {props.cards.map(cards => <Card  {...cards}/>)}
+        {props.cards.map(cards => <Card key= {cards.key} {...cards}/>)}
        
       </div>
     );
 };
 class Form extends React.Component {
+state = {
+  userName: ''
+}
+
+handleSubmit = (event) => {
+  event.preventDefault();
+  console.log('Event : Form Submit', this.state.userName);
+  axios.get(`https://api.github.com/users/${this.state.userName}`)
+  .then(resp => {
+    this.props.onSubmit(resp.data);
+    this.setState({userName:""});
+  });
+}
 
   render(){
     return (
-      <form>
-        <input type = "text" placeholder = "Github Username" />
+      <form onSubmit= {this.handleSubmit}>
+        <input type = "text" 
+        value = {this.state.userName}
+        onChange = {(event) => this.setState({userName:event.target.value})}
+        ref placeholder = "Github Username" />
         <button>Add Card </button>
       </form>
     );
@@ -36,19 +52,16 @@ class Form extends React.Component {
 class App extends Component {
 state = {
   data : [
-    {
-      name : "Jaspher",
-      avatar :"https://avatars0.githubusercontent.com/u/4433303?v=4",
-      company:"Fl"
-    },
-    {
-      name : "John",
-      avatar :"https://avatars1.githubusercontent.com/u/1668?v=4",
-      company:"Syncfusion"
-    }
+   
   ]
 }
 
+addNewCard = (cardInfo) => {
+  console.log(cardInfo.login);
+  this.setState(prevState =>({
+    data: prevState.data.concat(cardInfo)
+  }));
+};
   render() {
     return (
       <div className="App">
@@ -59,7 +72,7 @@ state = {
         <p className="App-intro">
           To get started, edit <code>src/App.js</code> and save to reload.
         </p>
-        <div> <Form /></div>
+        <div> <Form onSubmit = {this.addNewCard}/></div>
         <div><CardList cards = {this.state.data}/> </div>
       </div>
     );
